@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { pluralize, Skeleton } from '@patternfly/react-core';
+import { Skeleton } from '@patternfly/react-core';
 import { useAllApplicationEnvironmentsWithHealthStatus } from '../../hooks/useAllApplicationEnvironmentsWithHealthStatus';
 import { useComponents } from '../../hooks/useComponents';
 import ActionMenu from '../../shared/components/action-menu/ActionMenu';
 import { RowFunctionArgs, TableData } from '../../shared/components/table';
 import { Timestamp } from '../../shared/components/timestamp/Timestamp';
 import { ApplicationKind } from '../../types';
+import GitLink from '../GitLink/GitLink';
 import { useApplicationActions } from './application-actions';
 import { applicationTableColumnClasses } from './ApplicationListHeader';
 
@@ -39,7 +40,18 @@ const ApplicationListRow: React.FC<RowFunctionArgs<ApplicationKind>> = ({ obj })
       </TableData>
       <TableData className={applicationTableColumnClasses.components}>
         {loaded ? (
-          pluralize(components.length, 'Component')
+          <>
+            <ul>
+              {components
+                .sort((a, b) => a.metadata.name.localeCompare(b.metadata.name))
+                .map((c) => (
+                  <li key={c.metadata.name}>
+                    {c.metadata.name}{' '}
+                    {c.spec.source?.git?.url && <GitLink url={c.spec.source.git.url} />}
+                  </li>
+                ))}
+            </ul>
+          </>
         ) : (
           <Skeleton width="50%" screenreaderText="Loading component count" />
         )}

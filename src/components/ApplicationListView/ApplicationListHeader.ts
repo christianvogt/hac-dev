@@ -1,6 +1,6 @@
 export const applicationTableColumnClasses = {
-  name: 'pf-m-width-35',
-  components: 'pf-m-width-35',
+  name: 'pf-m-width-25',
+  components: 'pf-m-width-45',
   lastDeploy: 'pf-m-width-30',
   kebab: 'pf-c-table__action',
 };
